@@ -1,13 +1,11 @@
-const db = require('../config/db'); // SQLite bağlantısı
-const { sendReminderEmail } = require('../services/emailService'); // Bu hala aynı, ama email servisini kullanmıyorsak kaldırabiliriz.
+const db = require('../config/db'); 
+const { sendReminderEmail } = require('../services/emailService'); 
 
-// SQLite için callback tabanlı çalışan bir yardımcı fonksiyon
-// Promisify ederek async/await ile kullanabiliriz
 const runAsync = (query, params = []) => {
     return new Promise((resolve, reject) => {
         db.run(query, params, function(err) {
             if (err) reject(err);
-            else resolve(this); // this objesi son eklenen ID'yi falan içerir
+            else resolve(this); 
         });
     });
 };
@@ -59,7 +57,6 @@ const createTakip = async (req, res) => {
         const values = [isim, giris_tarihi, bitis_tarihi, firma_ismi, iletisim, durum || 'Aktif'];
         const result = await runAsync(query, values);
         
-        // SQLite'da son eklenen ID'yi almak için this.lastID kullanılır
         const newRecord = await getAsync('SELECT * FROM takip_listesi WHERE id = ?', [result.lastID]);
         res.status(201).json(newRecord);
 
@@ -132,33 +129,8 @@ const deleteMultipleTakip = async (req, res) => {
     }
 };
 
-// Reminder servisi PostgreSQL'e özgü tarih fonksiyonları kullanıyordu.
-// SQLite için bu kısmı düzenlemeniz veya kaldırmanız gerekebilir.
-// Bu rehberde, Electron uygulamasının internet bağlantısı olmadığı varsayımıyla,
-// email reminder özelliğini şimdilik devre dışı bırakıyorum.
-// Eğer istiyorsanız, SQLite'ın tarih fonksiyonlarına uygun hale getirmemiz gerekir.
 const checkAndSendReminders = async () => {
     console.log('Hatırlatma kontrolü şimdilik devre dışı (SQLite uyarlaması gerekiyor).');
-    // Eğer email hatırlatma özelliğini kullanmak istiyorsanız:
-    /*
-    console.log('Günlük hatırlatma kontrolü başladı...');
-    try {
-        const query = `
-            SELECT * FROM takip_listesi
-            WHERE bitis_tarihi <= DATE('now', '+30 days')
-            AND bitis_tarihi >= DATE('now')
-            AND durum = 'Aktif'
-        `;
-        const kayitlar = await allAsync(query);
-        if (kayitlar.length === 0) { console.log("Uygun kayıt bulunamadı."); return; }
-        for (const kayit of kayitlar) {
-            const alici_email = process.env.EMAIL_USER; // Electron uygulamasında .env daha farklı ele alınmalı
-            await sendReminderEmail(kayit.isim, kayit.bitis_tarihi, alici_email);
-        }
-    } catch (error) {
-        console.error('Hatırlatma kontrolü sırasında bir hata oluştu:', error.message);
-    }
-    */
 };
 
 module.exports = {
