@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Son eklenen onDeleteSelected prop'u da dahil edildi
 function TakipListesi({ items, onItemClick, onAddNewClick, selectedItems, onSelectItem, onSelectAll, onDeleteSelected }) {
   
   const getStatusColor = (durum) => {
