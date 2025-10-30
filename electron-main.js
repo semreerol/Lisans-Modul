@@ -5,13 +5,13 @@ const { fork } = require('child_process');
 let mainWindow;
 let backendProcess;
 
-// startBackend fonksiyonunu, isDev parametresini alacak şekilde güncelleyelim
-function startBackend(isDev) { // <-- isDev parametresi eklendi
+
+function startBackend(isDev) { 
     const backendPath = path.join(__dirname, 'backend', 'index.js');
     console.log(`Backend başlatılıyor: ${backendPath}`);
 
     if (isDev) {
-        // Geliştirme ortamında ayrı bir süreçte çalıştırmak pratik olur
+        
         backendProcess = fork(backendPath, [], {
             cwd: path.join(__dirname, 'backend'),
             env: { ...process.env, PORT: 5000, NODE_ENV: 'development' },
@@ -28,11 +28,10 @@ function startBackend(isDev) { // <-- isDev parametresi eklendi
             console.log(`Backend süreci çıktı ${code} koduyla.`);
         });
     } else {
-        // Üretimde child_process.fork bazı Windows kurulumlarında APP EXE'yi spawn ederken ENOENT üretebiliyor.
-        // Bu nedenle backend'i aynı süreç içinde require ederek başlatıyoruz.
+
         process.env.PORT = process.env.PORT || '5000';
         process.env.NODE_ENV = 'production';
-        // SQLite dosyası için yazılabilir dizini backend'e ilet
+
         process.env.APP_DATA_DIR = app.getPath('userData');
         try {
             require(backendPath);
@@ -45,7 +44,7 @@ function startBackend(isDev) { // <-- isDev parametresi eklendi
 
 
 async function initializeApp() {
-    // isDev'i burada tanımlıyoruz
+
     const { default: isDev } = await import('electron-is-dev');
 
     function createWindow() {
@@ -71,8 +70,7 @@ async function initializeApp() {
         mainWindow.on('closed', () => (mainWindow = null));
     }
 
-    // startBackend'i çağırırken isDev değerini gönderiyoruz
-    startBackend(isDev); // <-- Değişiklik burada
+    startBackend(isDev); 
     createWindow();
 
     app.on('activate', () => {
@@ -81,7 +79,6 @@ async function initializeApp() {
         }
     });
 }
-
 
 app.whenReady().then(initializeApp);
 
