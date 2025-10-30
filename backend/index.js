@@ -1,4 +1,4 @@
-require('dotenv').config(); // .env dosyasını Electron içinde farklı ele alacağız, şimdilik dursun.
+require('dotenv').config(); 
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -13,18 +13,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// CORS kaldırıldı, Electron içinde aynı kaynaktan erişim olacağı için gerekmez
-// const cors = require('cors');
-// app.use(cors()); 
-
-// Rota tanımları
 app.use('/api/takip', takipRoutes);
-
-// Her gün sabah 9'da hatırlatma kontrolü (Email servisi aktifse kullanılabilir)
-// cron.schedule('0 9 * * *', () => {
-//   console.log('Günlük hatırlatma kontrolü tetiklendi.');
-//   checkAndSendReminders();
-// });
 
 app.listen(PORT, () => {
     console.log(`Backend sunucusu http://localhost:${PORT} adresinde çalışıyor (SQLite ile).`);
