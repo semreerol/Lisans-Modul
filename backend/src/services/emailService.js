@@ -1,7 +1,5 @@
 const nodemailer = require('nodemailer');
 
-// Nodemailer için "taşıyıcı" (transporter) oluşturuyoruz.
-// Burası e-postayı hangi sunucu üzerinden göndereceğimizi belirler.
 // Gmail için "Uygulama Şifresi" kullanacağız.
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -11,7 +9,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Hatırlatma e-postasını gönderen asenkron fonksiyon
 const sendReminderEmail = async (isim, bitis_tarihi, alici_email) => {
   const mailOptions = {
     from: `"Takip Uygulaması" <${process.env.EMAIL_USER}>`,
