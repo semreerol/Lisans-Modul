@@ -1,0 +1,76 @@
+{
+  "name": "modul",
+  "version": "1.0.0",
+  "description": "Uygulamamız kullanılan lisansların sürelerinin takibini kontrol etmek amacıyla yazılmıştır. Diğer uygulamaların da takibi kolaylıkla yapılabilir.",
+  "homepage": "https://github.com/semreerol/Lisans-Modul#readme",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "electron-dev": "concurrently \"npm run dev-backend\" \"npm run dev-frontend\" \"wait-on http://localhost:3000 && electron .\"",
+    "dev-frontend": "npm start --prefix frontend",
+    "dev-backend": "node backend/index.js",
+    "build-frontend": "npm run build --prefix frontend",
+    "build": "npm run build-frontend && electron-builder",
+    "postinstall": "npm install --prefix frontend && npm install --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/semreerol/Lisans-Modul.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/semreerol/Lisans-Modul/issues"
+  },
+  "dependencies": {
+    "electron-is-dev": "^3.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^29.1.0",
+    "electron-builder": "^24.13.3",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.semreerol.lisansmodul",
+    "productName": "Lisans Modul",
+    "files": [
+      "**/*",
+      "!frontend/src",
+      "!frontend/public",
+      "!backend/src",
+      "frontend/build/**/*"
+    ],
+    "extraFiles": [
+      {
+        "from": "backend/data",
+        "to": "resources/app.asar.unpacked/backend/data",
+        "filter": ["**/*"]
+      }
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png"
+    }
+  }
+}

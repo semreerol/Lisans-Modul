@@ -16,3 +16,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+node_modules
+
+# Electron derleme çıktıları
+/release/
+
+# SQLite veritabanı klasörü
+/backend/data/
+
+# macOS paketleme artıkları (varsa)
+*.dmg
