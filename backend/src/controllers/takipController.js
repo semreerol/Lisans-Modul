@@ -82,7 +82,7 @@ const updateTakip = async (req, res) => {
         const values = [isim, giris_tarihi, bitis_tarihi, firma_ismi, iletisim, durum, id];
         const result = await runAsync(query, values);
 
-        if (result.changes === 0) { // SQLite'da etkilenen satır sayısı result.changes ile alınır
+        if (result.changes === 0) { 
             return res.status(404).json({ error: 'Güncellenecek kayıt bulunamadı.' });
         }
         const updatedRecord = await getAsync('SELECT * FROM takip_listesi WHERE id = ?', [id]);
@@ -117,8 +117,8 @@ const deleteMultipleTakip = async (req, res) => {
             return res.status(400).json({ error: 'Silinecek kayıt IDleri sağlanmadı.' });
         }
 
-        // SQLite'da IN operatörü
-        const placeholders = ids.map(() => '?').join(', '); // ?, ?, ? şeklinde yer tutucular oluşturur
+       
+        const placeholders = ids.map(() => '?').join(', '); 
         const query = `DELETE FROM takip_listesi WHERE id IN (${placeholders});`;
         const result = await runAsync(query, ids);
 
