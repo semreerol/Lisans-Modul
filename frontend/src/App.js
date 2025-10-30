@@ -13,10 +13,9 @@ function App() {
 
   const API_URL = 'http://localhost:5000/api/takip';
 
-//Tek bir checkbox'ın durumunu değiştirir
   const handleSelectItem = (id) => {
     setSelectedItems(prevSelected => {
-      // Eğer ID zaten seçiliyse, listeden çıkar (uncheck)
+
       if (prevSelected.includes(id)) {
         return prevSelected.filter(itemId => itemId !== id);
       }
@@ -26,7 +25,6 @@ function App() {
     });
   };
 
-  //Tüm checkbox'ları seçer veya bırakır
   const handleSelectAll = () => {
     if (selectedItems.length === takipListesi.length) {
       setSelectedItems([]);
@@ -36,9 +34,6 @@ function App() {
     }
   };
 
-
-
-  //Bu fonksiyonun içi artık dolu ve doğru.
   const fetchTakipListesi = async () => {
     try {
       const response = await axios.get(API_URL);
@@ -52,7 +47,6 @@ function App() {
     fetchTakipListesi();
   }, []);
 
-  //Bu fonksiyonun içi artık dolu ve doğru.
   const handleKayitEkle = async (yeniKayit) => {
     try {
       const response = await axios.post(API_URL, yeniKayit);
@@ -71,7 +65,6 @@ function App() {
     }
   };
 
-  //Bu fonksiyonun içi artık dolu ve doğru.
   const handleGuncelle = async (guncelKayit) => {
     try {
       const response = await axios.put(`${API_URL}/${guncelKayit.id}`, guncelKayit);
@@ -88,7 +81,6 @@ function App() {
     }
   };
 
-  //Bu fonksiyonun içi artık dolu ve doğru.
   const handleSil = async (id) => {
     handleCloseModal();
     if (window.confirm(`${id} ID'li kaydı silmek istediğinizden emin misiniz?`)) {
@@ -101,7 +93,7 @@ function App() {
       }
     }
   };
-  //Seçili olan tüm kayıtları siler
+  
   const handleDeleteSelected = async () => {
     if (selectedItems.length === 0) {
       alert('Lütfen silmek için en az bir kayıt seçin.');
@@ -109,11 +101,11 @@ function App() {
     }
     if (window.confirm(`${selectedItems.length} adet kaydı silmek istediğinizden emin misiniz?`)) {
       try {
-        // Axios'ta DELETE isteği ile body göndermek için özel bir yapı kullanılır
+        
         await axios.delete(API_URL, { data: { ids: selectedItems } });
         alert(`${selectedItems.length} adet kayıt başarıyla silindi.`);
-        fetchTakipListesi(); // Listeyi yenile
-        setSelectedItems([]); // Seçimi temizle
+        fetchTakipListesi(); 
+        setSelectedItems([]); 
       } catch (error) {
         console.error("Toplu silme sırasında bir hata oluştu:", error);
         alert('Kayıtlar silinirken bir hata oluştu.');
